@@ -6,9 +6,13 @@
   <title>Index Landing Page</title>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
   <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
+  body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-image: url('snowbg.jpg');
+    background-size: cover; /* Adjusts the background image size */
+    background-position: center; /* Centers the background image */
+    background-attachment: fixed; /* Fixed background */
     }
 
     header {
@@ -16,6 +20,9 @@
       padding: 10px;
       text-align: center;
       color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
 
     nav {
@@ -40,11 +47,12 @@
 
     main {
       text-align: center;
-      display: flex;
-      justify-content: space-between;
       max-width: 800px;
       margin: 20px auto;
       padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
 
     section {
@@ -55,30 +63,66 @@
       text-decoration: underline;
     }
 
-    #map-container {
-      height: 400px;
-      width: 60%;
+    #intro-box {
+      background-color: #f0f0f0;
+      padding: 15px;
+      margin-top: 10px;
       border: 2px solid black;
-      padding: 10px;
-      box-sizing: border-box; /* Include padding in the width */
+    }
+
+    #map-container {
+      height: 380px;
+      width: 80%;
+      margin: 20px auto;
+      border: 2px solid black;
+      padding: px; /* Added padding */
+    }
+
+    #location-box { 
+      border: 2px solid black;  
     }
 
     #map {
       height: 100%;
+      margin-top: 10px; /* Added margin between location box and map */
     }
 
     #location-info {
+      margin-top: 10px; /* Added margin between location info and map */
+    }
+
+    #location-box {
+      background-color: #f0f0f0;
+      padding: 15px;
       margin-top: 10px;
     }
 
-    #text-box {
-      width: 30%;
-      padding: 10px;
-      box-sizing: border-box;
-      background-color: #f0f0f0;
-      border: 2px solid #ccc;
+    button {
+      margin-top: 10px;
     }
   </style>
+
+<style>
+
+  #legend-box {
+    background-color: #f0f0f0;
+    padding: 15px;
+    margin-top: 10px;
+    border: 2px solid black;
+    color: black; /* Set text color to white */
+  }
+
+  #category-select {
+    color: black; /* Set text color to white */
+  }
+
+  #main-options,
+  #sub-options {
+    color: black; /* Set text color to black for the sub-options */
+  }
+</style>
+
+
 </head>
 <body>
 
@@ -90,18 +134,17 @@
     <a href="#">Home</a>
     <a href="#">Map</a>
     <a href="about.html">About</a>
-    <!-- Add more navigation links as needed -->
   </nav>
 
   <main>
+    <!-- Introduction text box above the map -->
+    <div id="intro-box">
+      <p>Welcome to the Algonquin College Map Navigator for the Ottawa Campus. Explore the campus and find the fastest routes with this interactive map!</p>
+    </div>
+
     <div id="map-container">
       <!-- Add a div for the map -->
       <div id="map"></div>
-    </div>
-
-    <div id="text-box">
-      <h2>Additional Information</h2>
-      <p>This is some additional information about the map or the location.</p>
     </div>
 
     <!-- Functions to get users current location -->
@@ -126,10 +169,85 @@
 
     <!-- Display location info -->
     <div id="location-info"></div>
+
+    <!-- Location box -->
+    <div id="location-box">
+      <p>Press the button above to see your current location on the map. Once your location is marked on the map, choose a location from the legend below to get the fastest route!</p>
+    </div>
+
+<!-- Legend box -->
+<div id="legend-box">
+  <label for="category-select" id="category-label">What Are You Looking For ?</label>
+  <select id="category-select" onchange="showSubOptions()">
+    <option value="none">-- Choose Category --</option>
+    <option value="bathroom">Bathroom</option>
+    <option value="building">Building</option>
+    <option value="food">Food Place</option>
+    <option value="library">Library</option>
+  </select>
+
+  <div style="padding-top: 5px;"></div> <!-- Added padding -->
+
+  <!-- Placeholder drop-down for washrooms -->
+  <div id="washroom-options" class="options" style="display: none; padding-top: 5px;"> <!-- Added padding-top -->
+    <label for="washroom-type">Select Washroom Type:</label>
+    <select id="washroom-type" name="washroom-type">
+      <option value="default-washroom">-- Select an Option --</option>
+      <option value="male">Male</option>
+      <option value="female">Female</option>
+    </select>
+  </div>
+
+  <!-- Placeholder drop-down for food services -->
+  <div id="food-options" class="options" style="display: none; padding-top: 5px;"> <!-- Added padding-top -->
+    <label for="food-place">Select Food Place:</label>
+    <select id="food-place" name="food-place">
+      <option value="default-food">-- Select a Food Option --</option>
+      <option value="starbucks">Starbucks</option>
+      <option value="tim-hortons">Tim Hortons</option>
+      <option value="wolves-den">Wolves Den</option>
+    </select>
+  </div>
+
+  <!-- Placeholder drop-down for buildings -->
+  <div id="building-options" class="options" style="display: none; padding-top: 5px;"> <!-- Added padding-top -->
+    <label for="building-name">Select Building:</label>
+    <select id="building-name" name="building-name">
+      <option value="default-building">-- Select a Building --</option>
+      <option value="A">Building A</option>
+      <option value="B">Building B</option>
+      <option value="A">Building C</option>
+      <option value="B">Building E</option>
+      <option value="A">Building N</option>
+      <option value="B">Building CA</option>
+    </select>
+  </div>
+</div>
+
   </main>
 
   <!-- Head Files and includes -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+  <script>
+    function showSubOptions() {
+      var category = document.getElementById("category-select").value;
+  
+      // Hide all sub-options initially
+      document.getElementById("washroom-options").style.display = "none";
+      document.getElementById("food-options").style.display = "none";
+      document.getElementById("building-options").style.display = "none";
+  
+      // Show sub-options based on the selected category
+      if (category === "bathroom") {
+        document.getElementById("washroom-options").style.display = "block";
+      } else if (category === "food") {
+        document.getElementById("food-options").style.display = "block";
+      } else if (category === "building") {
+        document.getElementById("building-options").style.display = "block";
+      }
+    }
+  </script>
 
   <script>
     // Initialize Leaflet map
